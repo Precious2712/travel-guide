@@ -34,33 +34,31 @@ export function StickySection() {
 
     return (
         <section className="relative ">
-
             <div className="max-w-6xl mx-auto grid grid-cols-2 gap-12">
-
+                {/* LEFT: Text sections */}
                 <div>
                     {sections.map((section, index) => (
                         <div
                             key={index}
-                            ref={(el) => {
-                                sectionRefs.current[index] = el;
-                            }}
+                            ref={(el) => { sectionRefs.current[index] = el; }}
                             data-index={index}
-                            className="h-screen flex items-center justify-center"
+                            className="h-screen flex items-center justify-center "
                         >
                             <div className="text-center">
-                                <h1 className="text-4xl font-bold">{section.title}</h1>
-                                <p className="mt-4 text-gray-600">{section.text}</p>
+                                <h1 className="text-4xl font-bold text-white/90">
+                                    {section.title}
+                                </h1>
+                                <p className="mt-4 text-white/70">{section.text}</p>
                             </div>
                         </div>
                     ))}
+
                 </div>
 
-                
-                <div className="relative">
-
-                    <div className="sticky top-1/2 -translate-y-1/2">
-
-                        <div className="w-100 h-100 relative mx-auto">
+                {/* RIGHT: Sticky Image */}
+                <div className="relative ">
+                    <div className="sticky top-30 h-screen flex items-center justify-center">
+                        <div className="relative w-150 h-150">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeIndex}
@@ -74,16 +72,14 @@ export function StickySection() {
                                         src={sections[activeIndex].image}
                                         alt={sections[activeIndex].title}
                                         fill
-                                        className="object-contain"
+                                        className="object-contain rounded-xl "
                                         priority={activeIndex === 0}
                                     />
                                 </motion.div>
                             </AnimatePresence>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </section>
     );

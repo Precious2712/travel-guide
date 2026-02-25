@@ -64,8 +64,8 @@ export function DesktopHeader() {
     };
 
     return (
-        <div className="relative bg-sky-800">
-            <nav className="flex justify-between items-center py-4 px-6 border-b-2 border-b-amber-500">
+        <div className="relative bg-[linear-gradient(135deg,#5B21B6_0%,#7C3AED_50%,#6D28D9_100%)]">
+            <nav className="flex justify-between items-center py-4 px-6 border-b-2 border-b-gray-400">
                 <span className="text-2xl font-bold text-white">
                     Air-Swift
                 </span>
