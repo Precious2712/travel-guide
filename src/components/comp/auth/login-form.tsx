@@ -114,7 +114,7 @@ export function LoginForm() {
                                 </Button>
                             </form>
 
-                           
+
 
 
                         </CardContent>
@@ -127,6 +127,10 @@ export function LoginForm() {
                                 </span>
                             </Link>
                         </CardFooter>
+
+                        <Link href="/" className="text-white text-sm text-center underline decoration-blue-500 hover:decoration-blue-400 transition underline-offset-4">
+                            Home
+                        </Link>
                     </Card>
                 </div>
 

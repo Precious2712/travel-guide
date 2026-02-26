@@ -7,7 +7,7 @@ export function Footer() {
         <footer className=" text-white mt-20">
             <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
 
-                
+
                 <div className="flex flex-col space-y-4">
                     <h2 className="text-2xl font-bold drop-shadow-lg">Air Swift</h2>
                     <p className="text-white/80 text-sm">
@@ -21,7 +21,7 @@ export function Footer() {
                     </div>
                 </div>
 
-                
+
                 <div className="flex flex-col space-y-2">
                     <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
                     <a href="#" className="hover:text-blue-200 transition">Home</a>
@@ -31,7 +31,7 @@ export function Footer() {
                     <a href="#" className="hover:text-blue-200 transition">About</a>
                 </div>
 
-                
+
                 <div className="flex flex-col space-y-2">
                     <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
                     <div className="flex items-center gap-2">
@@ -48,19 +48,23 @@ export function Footer() {
                     </div>
                 </div>
 
-                
-                <div className="flex flex-col space-y-3">
-                    <h3 className="text-lg font-semibold mb-2">Subscribe</h3>
-                    <p className="text-white/80 text-sm">
-                        Get the latest deals and updates right in your inbox.
-                    </p>
-                    <div className="flex gap-2">
+
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">Subscribe</h3>
+                        <p className="text-white/80 text-sm">
+                            Get the latest deals and updates right in your inbox.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                         <input
                             type="email"
                             placeholder="Enter your email"
-                            className="flex-1 rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+                            className="flex-1 w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
                         />
-                        <button className="bg-white text-blue-600 px-4 py-2 rounded-md font-semibold hover:bg-white/90 transition">
+                        <button className="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-md font-semibold hover:bg-white/90 transition">
                             Subscribe
                         </button>
                     </div>
@@ -68,7 +72,7 @@ export function Footer() {
 
             </div>
 
-            
+
             <div className="border-t border-white/20 mt-10 py-4 text-center text-white/60 text-sm">
                 &copy; {new Date().getFullYear()} Air Swift. All rights reserved.
             </div>

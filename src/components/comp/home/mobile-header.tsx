@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown, Plane, Clock, Shield, Star, Sparkles, Tag, Award } from "lucide-react";
 import { useState, useRef } from "react";
@@ -11,6 +12,8 @@ export function MobileHeader() {
     const [openItem, setOpenItem] = useState<string | null>(null);
     const [isPaused, setIsPaused] = useState(false);
     const marqueeRef = useRef<HTMLDivElement>(null);
+
+    const navigate = useRouter();
 
     const handleOpenNav = () => setOpen(!open);
 
@@ -46,6 +49,15 @@ export function MobileHeader() {
         { icon: <Star size={14} />, text: "5-Star Rated Airline" },
     ];
 
+    const handleLogin = () => {
+        navigate.replace('/login');
+    };
+
+    const handleSignup = () => {
+        navigate.replace('/signup');
+    };
+
+
     return (
         <div className="relative">
             <div className="flex justify-between items-center bg-linear-to-r from-sky-600 to-sky-400 py-3 px-4 fixed w-full z-50 shadow-md">
@@ -74,11 +86,11 @@ export function MobileHeader() {
                 shadow-2xl transform transition-transform duration-300 ease-in-out
                 ${open ? "translate-x-0" : "translate-x-full"}`}
             >
-               
+
                 <div className="absolute top-0 left-0 right-0 h-20 bg-linear-to-r from-sky-600 to-sky-400 -z-10">
-                    
+
                     <div className="relative h-full overflow-hidden">
-                        
+
                         <div className="absolute left-0 top-0 bottom-0 w-12 bg-linear-to-r from-sky-600 to-transparent z-10" />
 
                         <div className="absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-sky-400 to-transparent z-10" />
@@ -204,10 +216,10 @@ export function MobileHeader() {
 
                 <div className="p-4 border-t border-gray-200 mt-4">
                     <div className="space-y-2">
-                        <Button className="w-full bg-sky-600 hover:bg-sky-700 text-white rounded-lg py-5">
+                        <Button onClick={handleLogin} className="w-full bg-sky-600 hover:bg-sky-700 text-white rounded-lg py-5">
                             Sign In
                         </Button>
-                        <Button variant="outline" className="w-full border-sky-200 text-sky-700 hover:bg-sky-50 rounded-lg py-5">
+                        <Button onClick={handleSignup} variant="outline" className="w-full border-sky-200 text-sky-700 hover:bg-sky-50 rounded-lg py-5">
                             Create Account
                         </Button>
                     </div>

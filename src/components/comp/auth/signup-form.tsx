@@ -370,6 +370,10 @@ export function SignupForm() {
                         </p>
                     </motion.div>
                 </motion.div>
+
+                <Link href="/" className="text-white text-sm text-center underline decoration-green-700 hover:decoration-pink-400 transition underline-offset-4 mt-2">
+                    Home
+                </Link>
             </div>
         </div>
     );
