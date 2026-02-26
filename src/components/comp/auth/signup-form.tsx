@@ -1,358 +1,376 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Plane, Globe, MapPin, Shield, Eye, EyeOff, User, Mail, Lock, Cloud, Star, Compass, Wind } from "lucide-react";
 
 import { SignupFormValues, signupFormSchema } from "./form-schema";
-import { signupFieldComp } from "@/data/auth-field";
-import { ShacdnSignup } from "./shacdn-signup";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card";
-
-import { Field, FieldGroup } from "@/components/ui/field";
+import { PasswordRequirements } from "./password-requirement";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
-// Password requirement component props
-interface PasswordRequirementProps {
-    met: boolean;
-    text: string;
-}
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    },
+};
 
-const PasswordRequirement = ({ met, text }: PasswordRequirementProps) => (
-    <motion.div
-        className="flex items-center space-x-2 text-sm"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
-    >
-        <motion.div
-            animate={{
-                scale: met ? [1, 1.2, 1] : 1,
-                backgroundColor: met ? "#10b981" : "#6b7280"
-            }}
-            transition={{ duration: 0.3 }}
-            className={`w-4 h-4 rounded-full flex items-center justify-center`}
-        >
-            {met && (
-                <motion.svg
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="w-3 h-3 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </motion.svg>
-            )}
-        </motion.div>
-        <span className={met ? "text-white" : "text-white/60"}>{text}</span>
-    </motion.div>
-);
+const itemVariants = {
+    hidden: { y: 16, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring" as const, stiffness: 120 } },
+};
+
+const destinations = ["Tokyo", "Paris", "New York", "Bali", "London", "Dubai"];
 
 export function SignupForm() {
-    const [password, setPassword] = useState<string>("");
-    const [passwordStrength, setPasswordStrength] = useState<number>(0);
+    const [passwordStrength, setPasswordStrength] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
 
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupFormSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        defaultValues: { email: "", password: "" },
     });
 
-    // Watch password changes
     const watchPassword = form.watch("password");
+    const errors = form.formState.errors;
 
     useEffect(() => {
-        setPassword(watchPassword || "");
-
-        // Calculate password strength
-        let strength = 0;
-        if (watchPassword?.length >= 8) strength += 25;
-        if (watchPassword?.match(/[A-Z]/)) strength += 25;
-        if (watchPassword?.match(/[0-9]/)) strength += 25;
-        if (watchPassword?.match(/[^A-Za-z0-9]/)) strength += 25;
-
-        setPasswordStrength(strength);
+        const p = watchPassword || "";
+        let s = 0;
+        if (p.length >= 8) s += 25;
+        if (/[A-Z]/.test(p)) s += 25;
+        if (/[0-9]/.test(p)) s += 25;
+        if (/[^A-Za-z0-9]/.test(p)) s += 25;
+        setPasswordStrength(s);
     }, [watchPassword]);
 
-    const passwordRequirements: PasswordRequirementProps[] = [
-        { met: password.length >= 8, text: "At least 8 characters" },
-        { met: /[A-Z]/.test(password), text: "One uppercase letter" },
-        { met: /[0-9]/.test(password), text: "One number" },
-        { met: /[^A-Za-z0-9]/.test(password), text: "One special character" },
-    ];
-
     function onSubmit(data: SignupFormValues) {
-        console.log(data);
+        console.log("Signup:", data);
     }
 
-    // Animation variants with proper typing
-    const containerVariants: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.3,
-                delayChildren: 0.2,
-            },
-        },
-    };
-
-    const itemVariants: Variants = {
-        hidden: {
-            y: 20,
-            opacity: 0
-        },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                type: "spring", 
-                stiffness: 100,
-            },
-        },
-    };
-
-    const strengthColor = passwordStrength <= 25 ? "bg-red-500" : passwordStrength <= 50 ? "bg-orange-500" : passwordStrength <= 75 ? "bg-yellow-500" : "bg-green-500";
-
     return (
-        <div className="flex flex-1 min-h-screen bg-gray-900">
-            {/* Left Side - Flight-themed with password requirements */}
-            <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex-1 bg-linear-to-br from-blue-900 via-indigo-900 to-purple-900 relative overflow-hidden"
-            >
-                {/* Animated clouds/patterns */}
-                <motion.div
-                    className="absolute inset-0"
-                    animate={{
-                        backgroundPosition: ["0% 0%", "100% 100%"],
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                        ease: "linear"
-                    }}
-                    style={{
-                        backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                        backgroundSize: "200% 200%",
-                    }}
-                />
+        <div className="bg-linear-to-r from-sky-500 via-blue-500 to-indigo-600 flex min-h-screen">
 
-                {/* Main content */}
+            <div className="bg-linear-to-r from-sky-500 via-blue-500 to-indigo-600 relative hidden w-1/2 overflow-hidden gradient-sky-deep lg:flex lg:flex-col lg:justify-center lg:px-16">
+
+                <div className="pointer-events-none absolute inset-0">
+
+                    <div className="absolute -left-20 top-20 h-80 w-80 rounded-full bg-linear-to-br from-white/10 to-transparent blur-3xl" />
+                    <div className="absolute bottom-40 right-20 h-96 w-96 rounded-full bg-linear-to-tl from-white/5 to-transparent blur-3xl" />
+                    <div className="absolute left-1/4 top-1/3 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+
+                    <motion.div
+                        className="absolute left-10 top-40"
+                        animate={{ x: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
+                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        <Cloud className="h-16 w-16 text-white/20" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute right-32 bottom-32"
+                        animate={{ x: [0, -40, 0], opacity: [0.2, 0.4, 0.2] }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    >
+                        <Cloud className="h-20 w-20 text-white/15" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute right-16 top-24 z-20"
+                        animate={{
+                            x: [0, 30, 15, 0],
+                            y: [0, -15, -20, 0],
+                            rotate: [0, 5, -5, 0]
+                        }}
+                        transition={{
+                            duration: 8,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            times: [0, 0.3, 0.6, 1]
+                        }}
+                    >
+                        <div className="relative">
+                            <Plane className="h-10 w-10 rotate-[-30deg] text-white/40" />
+                            <div className="absolute -right-2 top-1/2 h-1 w-12 bg-linear-to-l from-white/30 to-transparent blur-sm" />
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute left-32 top-48 z-10"
+                        animate={{
+                            x: [0, -40, -20, 0],
+                            y: [0, 20, 10, 0],
+                            rotate: [0, -8, 8, 0]
+                        }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 0.5
+                        }}
+                    >
+                        <div className="relative">
+                            <Plane className="h-8 w-8 rotate-20 text-white/30" />
+                            <div className="absolute -left-2 top-1/2 h-0.5 w-8 bg-linear-to-r from-white/20 to-transparent blur-sm" />
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute bottom-32 left-1/3 z-0"
+                        animate={{
+                            x: [0, 60, 30, 0],
+                            y: [0, -30, -15, 0],
+                            rotate: [0, 15, -10, 0]
+                        }}
+                        transition={{
+                            duration: 12,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 1
+                        }}
+                    >
+                        <Plane className="h-6 w-6 rotate-45 text-white/20" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute right-40 top-1/3 z-0"
+                        animate={{
+                            x: [0, -50, -25, 0],
+                            y: [0, 25, 12, 0],
+                            rotate: [0, -12, 12, 0]
+                        }}
+                        transition={{
+                            duration: 14,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 2
+                        }}
+                    >
+                        <Plane className="h-5 w-5 rotate-[-15deg] text-white/15" />
+                    </motion.div>
+
+                    {[...Array(20)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                            }}
+                            animate={{
+                                scale: [1, 1.5, 1],
+                                opacity: [0.1, 0.3, 0.1],
+                            }}
+                            transition={{
+                                duration: 3 + Math.random() * 2,
+                                repeat: Infinity,
+                                delay: Math.random() * 2,
+                            }}
+                        >
+                            <Star className="h-3 w-3 text-white/20" />
+                        </motion.div>
+                    ))}
+
+                    <motion.div
+                        className="absolute right-24 top-28"
+                        animate={{ opacity: [0, 0.3, 0], scale: [0.5, 1.5, 0.5] }}
+                        transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                    >
+                        <Wind className="h-6 w-6 text-white/20" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute left-40 top-52"
+                        animate={{ opacity: [0, 0.3, 0], scale: [0.5, 1.5, 0.5] }}
+                        transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+                    >
+                        <Wind className="h-5 w-5 text-white/15" />
+                    </motion.div>
+                </div>
+
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="relative z-10 h-full flex flex-col items-center justify-center text-white p-8"
+                    className="relative z-30 max-w-lg"
                 >
+                    <motion.div variants={itemVariants} className="mb-6 flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                            <Plane className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <span className="text-xl font-bold tracking-tight text-primary-foreground" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            Air Swift
+                        </span>
+                    </motion.div>
 
+                    <motion.h1
+                        variants={itemVariants}
+                        className="mb-4 text-6xl font-bold leading-tight text-primary-foreground drop-shadow-lg"
+                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                        Your Next
+                        <br />
+                        Adventure
+                        <br />
+                        <span className="text-2xl text-white/70">Awaits</span>
+                    </motion.h1>
 
-                    {/* Main message */}
+                    <motion.p variants={itemVariants} className="mb-10 text-lg leading-relaxed text-white/80 drop-shadow">
+                        Book flights to 500+ destinations worldwide. Smart pricing, real-time tracking, and a seamless experience from takeoff to landing.
+                    </motion.p>
+
+                    <motion.div variants={itemVariants} className="mb-10 grid grid-cols-3 gap-6">
+                        {[
+                            { icon: Globe, label: "Destinations", value: "500+" },
+                            { icon: MapPin, label: "Airlines", value: "120+" },
+                            { icon: Shield, label: "Secure", value: "100%" },
+                        ].map((stat) => (
+                            <motion.div
+                                key={stat.label}
+                                className="text-center p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10"
+                                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <stat.icon className="mx-auto mb-2 h-5 w-5 text-white/70" />
+                                <div className="text-2xl font-bold text-primary-foreground">{stat.value}</div>
+                                <div className="text-xs text-white/60">{stat.label}</div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+
+                    <motion.div variants={itemVariants} className="flex flex-wrap gap-2">
+                        {destinations.map((dest, index) => (
+                            <motion.span
+                                key={dest}
+                                className="rounded-full bg-white/15 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm border border-white/20"
+                                whileHover={{
+                                    scale: 1.1,
+                                    backgroundColor: "rgba(255,255,255,0.25)",
+                                    borderColor: "rgba(255,255,255,0.4)"
+                                }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1 + index * 0.1 }}
+                            >
+                                <Compass className="inline-block h-3 w-3 mr-1" />
+                                {dest}
+                            </motion.span>
+                        ))}
+                    </motion.div>
+                </motion.div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-sky-600/50 to-transparent pointer-events-none" />
+            </div>
+
+            <div className="flex w-full flex-col items-center justify-center px-6 py-12 lg:w-1/2 lg:px-16">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="w-full max-w-md"
+                >
+                    <motion.div variants={itemVariants} className="mb-8 flex items-center gap-2 lg:hidden">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-sky">
+                            <Plane className="h-5 w-5 text-primary-foreground" />
+                        </div>
+                        <span className="text-lg font-bold text-foreground" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SkyRoute</span>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                        <h2
+                            className="mb-1 text-3xl font-bold text-foreground"
+                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                        >
+                            Create Account
+                        </h2>
+                        <p className="mb-8 text-muted-foreground">
+                            Start exploring the world with SkyRoute
+                        </p>
+                    </motion.div>
+
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        {/* Email */}
+                        <motion.div variants={itemVariants} className="space-y-2">
+                            <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                                Email
+                            </Label>
+                            <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="john@example.com"
+                                    className="pl-10"
+                                    {...form.register("email")}
+                                />
+                            </div>
+                            {errors.email && (
+                                <p className="text-xs text-destructive">{errors.email.message}</p>
+                            )}
+                        </motion.div>
+
+                        <motion.div variants={itemVariants} className="space-y-2">
+                            <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                                Password
+                            </Label>
+                            <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Create a strong password"
+                                    className="pl-10 pr-10"
+                                    {...form.register("password")}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                >
+                                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                </button>
+                            </div>
+                            {errors.password && (
+                                <p className="text-xs text-destructive">{errors.password.message}</p>
+                            )}
+
+                            {watchPassword && (
+                                <PasswordRequirements
+                                    password={watchPassword || ""}
+                                    strength={passwordStrength}
+                                />
+                            )}
+                        </motion.div>
+
+                        <motion.div variants={itemVariants} className="pt-2">
+                            <Button type="submit" className="w-full gradient-sky text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base font-semibold">
+                                <Plane className="mr-2 h-4 w-4" />
+                                Create Account
+                            </Button>
+                        </motion.div>
+
+                        <motion.p variants={itemVariants} className="text-center text-sm text-muted-foreground cursor-pointer">
+                            Already have an account?{" "}
+                            <Link href='/login' className="font-medium text-primary hover:underline">
+                                Sign in
+                            </Link>
+                        </motion.p>
+                    </form>
+
                     <motion.div
                         variants={itemVariants}
-                        className="text-center max-w-md"
+                        className="mt-8 rounded-xl border border-border bg-muted/50 p-4 text-center"
                     >
-                        <motion.h1
-                            variants={itemVariants}
-                            className="text-5xl font-bold mb-6 leading-tight"
-                        >
-                            Your Journey
-                            <motion.span
-                                animate={{
-                                    textShadow: ["0 0 8px rgba(255,255,255,0.5)", "0 0 16px rgba(255,255,255,0.8)", "0 0 8px rgba(255,255,255,0.5)"]
-                                }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                                className="block text-transparent bg-clip-text bg-linear-to-r from-yellow-200 to-pink-200"
-                            >
-                                Begins Here
-                            </motion.span>
-                        </motion.h1>
-
-                        <motion.p
-                            variants={itemVariants}
-                            className="text-lg text-blue-100 mb-8 leading-relaxed"
-                        >
-                            Join millions of travelers who trust us for seamless bookings,
-                            exclusive deals, and unforgettable experiences.
-                        </motion.p>
-
-                        {/* Password Requirements Card */}
-                        <motion.div
-                            variants={itemVariants}
-                            whileHover={{ scale: 1.02 }}
-                            className="space-y-4 text-left bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-2xl"
-                        >
-                            <motion.h3
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="text-lg font-semibold text-white mb-3"
-                            >
-                                Password Requirements
-                            </motion.h3>
-
-                            {/* Password strength bar */}
-                            <div className="mb-4">
-                                <div className="flex justify-between text-xs text-white/70 mb-1">
-                                    <span>Password Strength</span>
-                                    <span>
-                                        {passwordStrength <= 25 ? "Weak" :
-                                            passwordStrength <= 50 ? "Fair" :
-                                                passwordStrength <= 75 ? "Good" : "Strong"}
-                                    </span>
-                                </div>
-                                <motion.div className="h-2 bg-white/20 rounded-full overflow-hidden">
-                                    <motion.div
-                                        className={`h-full ${strengthColor}`}
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${passwordStrength}%` }}
-                                        transition={{ duration: 0.5 }}
-                                    />
-                                </motion.div>
-                            </div>
-
-                            {/* Password requirements list */}
-                            <AnimatePresence>
-                                {passwordRequirements.map((req, index) => (
-                                    <PasswordRequirement
-                                        key={index}
-                                        met={req.met}
-                                        text={req.text}
-                                    />
-                                ))}
-                            </AnimatePresence>
-
-                            {/* Flight deals teaser */}
-                            <motion.div
-                                className="mt-4 pt-4 border-t border-white/20"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1 }}
-                            >
-                                <p className="text-xs text-white/50">
-                                    ✈️ Join now and get 20% off your first booking!
-                                </p>
-                            </motion.div>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Floating destinations */}
-                    <motion.div
-                        className="absolute bottom-8 left-8 text-white/30 text-sm font-mono"
-                        animate={{
-                            opacity: [0.3, 0.6, 0.3],
-                        }}
-                        transition={{ duration: 4, repeat: Infinity }}
-                    >
-                        ✈️ NYC • PAR • TKY • LON • DXB ✈️
+                        <p className="text-sm text-muted-foreground">
+                            ✈️ Sign up today and get <span className="font-semibold text-accent">20% off</span> your first flight!
+                        </p>
                     </motion.div>
                 </motion.div>
-            </motion.div>
-
-            {/* Right Side - Signup Form with animations */}
-            <motion.div
-                initial={{ x: 100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                className="flex-1 bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-0"
-            >
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 20,
-                        delay: 0.4
-                    }}
-                    className="w-full max-w-md "
-                >
-                    <Card className="w-full shadow-2xl border-0 ">
-
-                        <CardContent className="pt-0 ">
-                            <form
-                                id="signup-form"
-                                onSubmit={form.handleSubmit(onSubmit)}
-                            >
-                                <FieldGroup>
-                                    {signupFieldComp.map((field, index) => (
-                                        <motion.div
-                                            key={field.name}
-                                            initial={{ x: -20, opacity: 0 }}
-                                            animate={{ x: 0, opacity: 1 }}
-                                            transition={{ delay: 0.7 + index * 0.1 }}
-                                        >
-                                            <ShacdnSignup
-                                                name={field.name}
-                                                placeholder={field.placeholder}
-                                                type={field.type}
-                                                required={field.required}
-                                                control={form.control}
-                                            />
-                                        </motion.div>
-                                    ))}
-                                </FieldGroup>
-                            </form>
-                        </CardContent>
-
-                        <CardFooter>
-                            <Field orientation="horizontal" className="justify-between w-full">
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        onClick={() => form.reset()}
-                                        className="hover:bg-gray-100"
-                                    >
-                                        Reset
-                                    </Button>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <Button
-                                        type="submit"
-                                        form="signup-form"
-                                        className="bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                                    >
-                                        <motion.span
-                                            animate={{
-                                                x: [0, 4, 0],
-                                            }}
-                                            transition={{
-                                                duration: 1.5,
-                                                repeat: Infinity,
-                                                repeatType: "reverse",
-                                                ease: "easeInOut"
-                                            }}
-                                            className="inline-block mr-2"
-                                        >
-                                            ✈️
-                                        </motion.span>
-                                        Sign Up & Fly
-                                    </Button>
-                                </motion.div>
-                            </Field>
-                        </CardFooter>
-                    </Card>
-                </motion.div>
-            </motion.div>
+            </div>
         </div>
     );
 }

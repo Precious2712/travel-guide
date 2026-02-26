@@ -6,11 +6,13 @@ import { HeroSection } from "@/components/comp/home/hero-section";
 import { MobileHeader } from "@/components/comp/home/mobile-header";
 import { StickySection } from "@/components/comp/home/sticky-section";
 import { FlightScrollMobile } from "@/components/comp/home/flight-scroll-mobile";
+import { SearchFlight } from "@/components/comp/home/search-flight";
+import { Footer } from "@/components/comp/home/footer";
 
 export default function Home() {
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(135deg,#5B21B6_0%,#7C3AED_50%,#6D28D9_100%)]">
+    <div className="min-h-screen bg-black">
 
       <div className="hidden lg:block fixed top-0 w-full z-50">
         <DesktopHeader />
@@ -36,6 +38,14 @@ export default function Home() {
 
       <div className="block mt-20 md:hidden">
         <FlightScrollMobile />
+      </div>
+
+      <div className="pt-14 bg-white">
+        <SearchFlight />
+      </div>
+
+      <div>
+        <Footer />
       </div>
 
     </div>

@@ -17,7 +17,7 @@ type Step = {
 
 export function FlightScrollSection() {
     return (
-        <section className="max-w-7xl mx-auto space-y-[25vh] pb-0">
+        <section className="max-w-7xl mx-auto space-y-[25vh] pb-10">
             {flightSteps.map((step, index) => (
                 <Panel key={step.title} step={step} index={index} />
             ))}
