@@ -1,31 +1,44 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useState, useEffect, useRef } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { Plane, MapPin, Calendar } from 'lucide-react'
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useState, useEffect, useRef } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Plane, MapPin, Calendar } from 'lucide-react';
 import planeImg from '../../../../public/1182bede-e6f1-4f7b-ae91-00abff37183e.png';
 
 export function SearchFlight() {
-    const [origin, setOrigin] = useState('')
-    const [destination, setDestination] = useState('')
-    const [departureDate, setDepartureDate] = useState<Date>(new Date())
-    const [returnDate, setReturnDate] = useState<Date>(new Date())
-    const [tripType, setTripType] = useState<'roundtrip' | 'oneway'>('roundtrip')
+    const [origin, setOrigin] = useState('');
+    const [destination, setDestination] = useState('');
+    const [departureDate, setDepartureDate] = useState<Date>(new Date());
+    const [returnDate, setReturnDate] = useState<Date>(new Date());
+    const [tripType, setTripType] = useState<'roundtrip' | 'oneway'>('roundtrip');
     const [scrollProgress, setScrollProgress] = useState(0)
-    const containerRef = useRef<HTMLDivElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null);
+
+
+    const formatDateTime = (date: Date) => {
+        const formatted = date.toLocaleString("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+
+        return formatted.replace(" AM", "AM").replace(" PM", "PM");
+    };
 
     const obj = {
         origin,
         destination,
-        departureDate,
-        returnDate
+        departureDate: formatDateTime(departureDate),
+        returnDate: formatDateTime(returnDate),
     }
 
     console.log('obj', obj);
-    
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,8 +54,8 @@ export function SearchFlight() {
         return () => container?.removeEventListener('scroll', handleScroll)
     }, [])
 
-    const dayColor = { r: 135, g: 206, b: 235 } 
-    const nightColor = { r: 15, g: 23, b: 42 } 
+    const dayColor = { r: 135, g: 206, b: 235 }
+    const nightColor = { r: 15, g: 23, b: 42 }
 
     const currentColor = {
         r: Math.round(dayColor.r + (nightColor.r - dayColor.r) * scrollProgress),
@@ -120,7 +133,7 @@ export function SearchFlight() {
 
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-2xl">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-                            
+
                             <div
                                 className="flex flex-col"
                             >

@@ -13,33 +13,33 @@ export function HeroSection() {
     };
     return (
         <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
-            {/* Abstract Geometric Shapes Background */}
+            
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                {/* Large purple circle - top right */}
+                
                 <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full border-2 border-primary/30 opacity-60" />
 
-                {/* Large yellow circle - bottom left */}
+                
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full border-2 border-accent/40 opacity-50" />
 
-                {/* Medium violet circle - top left */}
+                
                 <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-secondary/10 blur-2xl opacity-40" />
 
-                {/* Small accent circle - right side */}
+                
                 <div className="absolute top-1/3 -right-16 w-48 h-48 rounded-full border-2 border-muted/30 opacity-40" />
 
-                {/* Decorative square - bottom right */}
+                
                 <div className="absolute -bottom-20 right-1/4 w-40 h-40 rounded-3xl border-2 border-primary/20 opacity-30 rotate-45" />
 
-                {/* Floating circle center */}
+                
                 <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-accent/5 backdrop-blur-sm border border-accent/20 opacity-50" />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 mt-12 sm:px-6 lg:px-8">
-                {/* Parent Flex Container - Center Items */}
+                
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
-                    {/* Text Section */}
+                    
                     <div className="flex-1 space-y-6">
-                        {/* Badge */}
+                        
                         <motion.div
                             variants={fadeInUp}
                             className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-linear-to-r from-primary/10 to-accent/10 backdrop-blur-sm border border-primary/20"
@@ -54,7 +54,7 @@ export function HeroSection() {
                         </motion.div>
 
 
-                        {/* Heading */}
+                       
                         <div className="space-y-3">
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground text-pretty leading-tight">
                                 Discover Your Next Adventure
@@ -64,7 +64,7 @@ export function HeroSection() {
                             </p>
                         </div>
 
-                        {/* Features List */}
+                        
                         <div className="space-y-3 pt-2">
                             {[
                                 'Best Price Guarantee',
@@ -115,7 +115,7 @@ export function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Image Section */}
+                    
                     <div className="flex-1 w-full flex items-center justify-center mt-12">
                         <FlightImage />
                     </div>
