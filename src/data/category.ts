@@ -22,7 +22,7 @@ export const sections: Section[] = [
   {
     title: "Choose Your Destination",
     text: "Explore thousands of destinations worldwide with our interactive travel guide and plan your next journey with confidence.",
-    image: "/vacation.png",
+    image: "/dark-phone.png",
     category: "DESTINATIONS",
     features: [
       "Discover trending destinations & hidden gems",
