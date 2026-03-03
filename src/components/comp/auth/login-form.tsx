@@ -37,7 +37,7 @@ export function LoginForm() {
         await new Promise((resolve) => setTimeout(resolve, 1500));
     };
 
-    // Animation for image
+
     const imageVariants: Variants = {
         hidden: { x: -50, opacity: 0 },
         visible: {
@@ -50,9 +50,9 @@ export function LoginForm() {
         },
     };
 
-    // Form container animation - coming from bottom
+
     const formVariants: Variants = {
-        hidden: { 
+        hidden: {
             y: 50,
             opacity: 0,
         },
@@ -67,7 +67,7 @@ export function LoginForm() {
         },
     };
 
-    // Stagger children animations for form elements - coming from bottom
+
     const formElementsVariants: Variants = {
         hidden: { opacity: 0, y: 30 },
         visible: (i: number = 0) => ({
@@ -84,7 +84,7 @@ export function LoginForm() {
     return (
         <div className="min-h-screen bg-black flex items-center justify-center p-4">
             <div className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-center gap-12">
-                <motion.div 
+                <motion.div
                     className="hidden md:flex md:w-1/2 justify-center"
                     initial="hidden"
                     animate="visible"
@@ -100,7 +100,7 @@ export function LoginForm() {
                     />
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                     className="w-full md:w-1/2"
                     initial="hidden"
                     animate="visible"
@@ -148,7 +148,7 @@ export function LoginForm() {
                                     />
                                 </motion.div>
 
-                                <motion.div 
+                                <motion.div
                                     className="space-y-2 text-white"
                                     custom={3}
                                     variants={formElementsVariants}
