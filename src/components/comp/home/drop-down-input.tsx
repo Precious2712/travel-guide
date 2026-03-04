@@ -51,7 +51,7 @@ export function DropdownInput({
                 <ul className="absolute z-50 w-full bg-white/90 text-black rounded-md shadow-lg max-h-60 overflow-y-auto">
                     {options.map((opt, idx) => (
                         <li
-                            key={opt}
+                            key={`${opt}-${idx}`}
                             onMouseDown={() => { onChange(opt); setShowDropdown(false); }}
                             className={`px-4 py-2 cursor-pointer ${idx === activeIndex ? 'bg-blue-500 text-white' : ''}`}
                         >

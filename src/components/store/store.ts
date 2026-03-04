@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import flightSearchReducer from '../counter/counter-slice';
 import { flightApi } from "../counter/pokeman";
+import { flightSearchReducer, bookReducer } from "../counter/counter-slice";
 
 export const store = configureStore({
     reducer: {
         flightSearch: flightSearchReducer,
-        [flightApi.reducerPath]: flightApi.reducer
+        [flightApi.reducerPath]: flightApi.reducer,
+        userFlightBooking: bookReducer
     },
 
     middleware: (getDefaultMiddleware) =>

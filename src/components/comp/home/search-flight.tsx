@@ -15,7 +15,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Plane, MapPin, Calendar } from 'lucide-react';
 import planeImg from '../../../../public/1182bede-e6f1-4f7b-ae91-00abff37183e.png';
+import { setFlightBooking } from '@/components/counter/counter-slice';
 
+import { useRouter } from 'next/navigation'
 
 function useDebounce<T>(value: T, delay: number): T {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -28,15 +30,17 @@ function useDebounce<T>(value: T, delay: number): T {
 
 
 export function SearchFlight() {
-    const { from, to } = useSelector((state: RootState) => state.flightSearch)
+    const { from, to } = useSelector((state: RootState) => state.flightSearch);
     const dispatch = useDispatch();
-    const [searchFlights, {isLoading}] = useLazySearchFlightsQuery();
+    const [searchFlights, { isLoading }] = useLazySearchFlightsQuery();
 
     const [departureDate, setDepartureDate] = useState<Date>(new Date());
     const [returnDate, setReturnDate] = useState<Date>(new Date());
     const [tripType, setTripType] = useState<'roundtrip' | 'oneway'>('roundtrip');
     const [scrollProgress, setScrollProgress] = useState(0)
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const navigate = useRouter();
 
     const [loading, setLoading] = useState(false);
 
@@ -98,6 +102,13 @@ export function SearchFlight() {
         try {
             const result = await searchFlights({ from, to }).unwrap();
             console.log('Flight search result:', result);
+            dispatch(setFlightBooking(result));
+            localStorage.setItem("flightBooking", JSON.stringify(result));
+
+            if (result.data) {
+                navigate.push('/book');
+            }
+
         } catch (err) {
             console.error('Flight search error:', err);
         } finally {
@@ -107,7 +118,7 @@ export function SearchFlight() {
 
 
     return (
-        <div ref={containerRef} className="relative w-full min-h-screen overflow-y-scroll scroll-smooth" style={{ backgroundColor: bgColor, transition: 'background-color 0.1s ease' }}>
+        <div ref={containerRef} className="relative w-full min-h-screen overflow-y-scroll scroll-smooth no-scrollbar" style={{ backgroundColor: bgColor, transition: 'background-color 0.1s ease' }}>
             <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${planeImg.src})`, opacity: 1 - scrollProgress * 0.3, transition: 'opacity 0.1s ease' }} />
             <div className="absolute inset-0" style={{ backgroundColor: `rgba(15, 23, 42, ${overlayOpacity})`, transition: 'background-color 0.1s ease' }} />
 
@@ -128,7 +139,7 @@ export function SearchFlight() {
 
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-2xl">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-                            
+
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> From</label>
                                 <DropdownInput
@@ -140,7 +151,7 @@ export function SearchFlight() {
                                 />
                             </div>
 
-                           
+
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> To</label>
                                 <DropdownInput
@@ -152,13 +163,13 @@ export function SearchFlight() {
                                 />
                             </div>
 
-                            
+
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-2"><Calendar className="w-4 h-4" /> Depart</label>
                                 <DatePicker selected={departureDate} onChange={(date: Date | null) => date && setDepartureDate(date)} className="w-full bg-white/20 border border-white/30 rounded-md p-2.5 text-white placeholder:text-white/50 backdrop-blur-sm focus:bg-white/30 focus:border-white/50 transition-all" dateFormat="MMM dd, yyyy" minDate={new Date()} />
                             </div>
 
-                            
+
                             {tripType === 'roundtrip' && (
                                 <div className="flex flex-col">
                                     <label className="text-sm font-semibold text-white/90 mb-2 flex items-center gap-2"><Calendar className="w-4 h-4" /> Return</label>
@@ -168,7 +179,7 @@ export function SearchFlight() {
                         </div>
 
                         <div className="flex justify-center mt-8">
-                            
+
                             <Button
                                 onClick={handleSearch}
                                 disabled={loading}

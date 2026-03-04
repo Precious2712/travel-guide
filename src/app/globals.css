@@ -116,7 +116,7 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-/* app/globals.css */
+
 @keyframes blob {
 
   0%,
@@ -143,6 +143,18 @@
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  
+  scrollbar-width: none;
+  
 }
 
 @layer base {

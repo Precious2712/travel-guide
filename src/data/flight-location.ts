@@ -37,7 +37,7 @@ export interface FlightFromResponseItem {
   airline: string
   flightNumber: string
   from: FlightLocation
-  to: string // just an ID here
+  to: string 
   departureTime: string
   arrivalTime: string
   duration: string
@@ -52,7 +52,7 @@ export interface FlightToResponseItem {
   _id: string
   airline: string
   flightNumber: string
-  from: string // just an ID here
+  from: string 
   to: FlightLocation
   departureTime: string
   arrivalTime: string

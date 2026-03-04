@@ -1,32 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { FlightResponse } from "@/data/flight-response";
 
-import type { PayloadAction } from '@reduxjs/toolkit'
-
-export interface CounterState {
-    from: string
-    to: string
+export interface FlightSearchState {
+    from: string;
+    to: string;
 }
 
-const initialState: CounterState = {
-    from: '',
-    to: '',
-}
+const initialSearchState: FlightSearchState = {
+    from: "",
+    to: "",
+};
 
 export const flightSearchSlice = createSlice({
-    name: 'flightSearch',
-    initialState,
+    name: "flightSearch",
+    initialState: initialSearchState,
     reducers: {
         setFrom: (state, action: PayloadAction<string>) => {
-            state.from = action.payload
+            state.from = action.payload;
         },
-
         setTo: (state, action: PayloadAction<string>) => {
-            state.to = action.payload
+            state.to = action.payload;
         },
     },
-})
+});
+
+export const { setFrom, setTo } = flightSearchSlice.actions;
 
 
-export const { setTo, setFrom } = flightSearchSlice.actions
+export interface BookState {
+    flightBooking: FlightResponse | null;
+}
 
-export default flightSearchSlice.reducer
+const initialBookState: BookState = {
+    flightBooking: null,
+};
+
+export const bookSlice = createSlice({
+    name: "bookFlight",
+    initialState: initialBookState,
+    reducers: {
+        setFlightBooking: (
+            state,
+            action: PayloadAction<FlightResponse>
+        ) => {
+            state.flightBooking = action.payload;
+        }
+    },
+});
+
+export const { setFlightBooking } = bookSlice.actions;
+
+
+export const flightSearchReducer = flightSearchSlice.reducer;
+export const bookReducer = bookSlice.reducer;
